@@ -45,7 +45,8 @@ def add_new_user():
 def user_profile_view(user_id):
     """User Profile View"""
     user = User.query.get_or_404(user_id)
-    return render_template('user_profile.html', user=user)
+    posts = Post.query.filter_by(user_id=user_id).all()
+    return render_template('user_profile.html', user=user, posts=posts)
 
 @app.route('/users/<int:user_id>/edit', methods=['GET', 'POST'])
 def edit_user(user_id):
@@ -86,7 +87,7 @@ def new_post(user_id):
         post = Post(title=title, content=content, user_id=user_id)
         db.session.add(post)
         db.session.commit()
-        return redirect('/users')
+        return redirect(f'/users/{user_id}')
     else:
         return render_template('new_post.html', user=user)
 

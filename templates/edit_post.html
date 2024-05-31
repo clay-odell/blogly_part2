@@ -10,10 +10,16 @@ Edit Post: {{post.id}}
 </div>
 <section class="edit-form">
     <form method="POST">
-    <p>New Title: <br><input type="text" name="title"></p>
-    <p>New Content: <br><textarea name="content"></textarea></p>
+    <p>New Title: <br><input type="text" name="title" required></p>
+    <p>New Content: <br><textarea name="content" required></textarea></p>
     <br>
     <input type="submit" value="Submit Edits">
 </form>
+</section>
+<br>
+<section class="cancel">
+    <form action="/users/{{post.user.id}}">
+        <input type="submit" value="CANCEL">
+    </form>
 </section>
 {% endblock %}

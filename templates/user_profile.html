@@ -4,7 +4,7 @@ User Profile View
 {% endblock %}
 {% block main %}
 <h1>User Profile Information</h1>
-<h2>User: {{user.first_name}} {{user.last_name}}</h2>
+<h3>User: {{user.first_name}} {{user.last_name}}</h3>
 <div>
     <img src="{{user.image_URL}}" width="250">
 </div>
@@ -26,6 +26,19 @@ User Profile View
     <form action="/users">
         <input type="submit" value="Go Back">
     </form>
+</section>
+<section class="posts">
+    <h3>Posts:</h3>
+    <ul>
+        {% for post in posts %}
+        <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+        {% endfor %}
+    </ul>
+    <div class="add-post">
+        <form action="/users/{{user.id}}/posts/new">
+            <input type="submit" value="Add A Post">
+        </form>
+    </div>
 </section>
 
 {% endblock %}
