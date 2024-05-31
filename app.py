@@ -52,9 +52,9 @@ def edit_user(user_id):
     """Edit User"""
     user = User.query.get_or_404(user_id)
     if request.method == 'POST':
-        user.first_name = request.form['first-name']
-        user.last_name = request.form['last-name']
-        user.image_URL = request.form['img-url']
+        user.first_name = request.form["first-name"]
+        user.last_name = request.form["last-name"]
+        user.image_URL = request.form["img-url"]
         if not user.image_URL:
             user.image_URL = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'
 
@@ -74,5 +74,51 @@ def delete_user(user_id):
     else:
         return render_template('delete_user.html', user=user)
 
+## Post Views & Functionality ##
+
+@app.route('/users/<int:user_id>/posts/new', methods=['GET', 'POST'])
+def new_post(user_id):
+    """Add a New Post"""
+    user = User.query.get_or_404(user_id)
+    if request.method == 'POST':
+        title = request.form["title"]
+        content = request.form["content"]
+        post = Post(title=title, content=content, user_id=user_id)
+        db.session.add(post)
+        db.session.commit()
+        return redirect('/users')
+    else:
+        return render_template('new_post.html', user=user)
 
 
+@app.route('/posts/<int:post_id>')
+def show_post(post_id):
+    """Show Post"""
+    post = Post.query.get_or_404(post_id)
+    return render_template('show_post.html', post=post)
+
+
+@app.route('/posts/<int:post_id>/edit', methods=['GET', 'POST'])
+def edit_post(post_id):
+    """Edit Post"""
+    post = Post.query.get_or_404(post_id)
+    if request.method == 'POST':
+        post.title = request.form["title"]
+        post.content = request.form["content"]
+        db.session.commit()
+        return redirect(f'/posts/{post_id}')
+    else:
+        return render_template('edit_post.html', post=post)
+
+
+@app.route('/posts/<int:post_id>/delete', methods=['GET', 'POST'])
+def delete_post(post_id):
+    """Delete Post"""
+    post = Post.query.get_or_404(post_id)
+    if request.method == 'POST':
+        db.session.delete(post)
+        db.session.commit()
+        return redirect(f'/users/{post.user_id}')
+    else:
+        return render_template('delete_post.html', post=post)
+    

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}
+Post {{post.id}} View
+{% endblock %}
+{% block main %}
+<h1>Post {{post.id}} by: {{post.user.first_name}} {{post.user.last_name}}</h1>
+<section class="title">
+    <h3>{{post.title}}</h3>
+</section>
+<section class="content">
+    <p>{{post.content}}</p>
+</section>
+<section class="created-at">
+    <p>Created: {{post.created_at}}</p>
+</section>
+<br>
+<section class="edit">
+    <form action="/posts/{{post.id}}/edit">
+        <input type="submit" value="Edit Post">
+    </form>
+</section>
+<br>
+<section class="delete">
+    <form action="/posts/{{post.id}}/delete">
+        <input type="submit" value="Delete Post">
+    </form>
+</section>
+
+{% endblock %}

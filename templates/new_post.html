@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}
+New Post 
+{% endblock %}
+{% block main %}
+<h1>New Post Form:</h1>
+<p>Fill out the form below to make a new post.</p>
+<div class="new-form">
+    <form method="POST">
+        <p>Post Title: <br><input type="text" name="title" required></p>
+        <p>Post Content: <br><textarea name="content" required></textarea></p>
+        <input type="submit" value="Add Post">
+    </form>
+    <br>
+    <div class="back">
+        <form action="/users/{{user.id}}/posts">
+            <input type="submit" value="Go Back">
+        </form>
+    </div>
+</div>
+{% endblock %}

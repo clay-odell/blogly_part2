@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}
+Delete Post {{post.id}}
+{% endblock %}
+{% block main %}
+<h1 class="warning">Delete Post {{post.id}}</h1>
+<p>ARE YOU SURE THAT YOU WANT TO DELETE POST? THIS CANNOT BE UNDONE.</p>
+<section class="buttons">
+    <form method="POST">
+        <input type="submit" value="YES">
+    </form>
+    <br>
+    <form action="/posts/{{post.id}}/edit">
+        <input type="submit" value="NO">
+    </form>
+</section>
+{% endblock %}
