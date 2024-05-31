@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}
+User Profile View 
+{% endblock %}
+{% block main %}
+<h1>User Profile Information</h1>
+<h2>User: {{user.first_name}} {{user.last_name}}</h2>
+<div>
+    <img src="{{user.image_URL}}" width="250">
+</div>
+<br>
+<section id="buttons">
+    <div class="edit">
+        <form action="/users/{{user.id}}/edit">
+            <input type="submit" value="Edit User">
+        </form>
+    </div>
+    <br>
+    <div class="delete">
+        <form action="/users/{{user.id}}/delete">
+            <input type="submit" value="Delete User">
+        </form>
+    </div>
+    <br>
+    <div class="back">
+    <form action="/users">
+        <input type="submit" value="Go Back">
+    </form>
+</section>
+
+{% endblock %}

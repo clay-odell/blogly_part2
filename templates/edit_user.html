@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}
+Edit User {{user.first_name}} {{user.last_name}}
+{% endblock %}
+{% block main %}
+<h1>Current User: {{user.first_name}} {{user.last_name}}</h1>
+<h2>Edit User Form</h2>
+<p>Edit user by completing and submitting this form.</p>
+<form method="POST">
+    <p>First Name: <br><input type="text" name="first-name"></p>
+    <p>Last Name: <br><input type="text" name="last-name"></p>
+    <p>Image URL: <br><input type="url" name="img-url"></p>
+    <div class="save">
+        <input type="submit" value="Save">
+    </div>
+</form>
+<br>
+<div class="cancel">
+    <form action="/users/{{user.id}}">
+        <input type="submit" value="Cancel">
+    </form>
+</div>
+<br>
+<div class="delete">
+    <form action="/users/{{user.id}}/delete">
+        <input type="submit" value="Delete User">
+    </form>
+</div>
+{% endblock %}
