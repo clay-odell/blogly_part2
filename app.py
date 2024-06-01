@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Post
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:01302@localhost/blogly_2'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:01302@localhost/blogly'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 with app.app_context():
@@ -122,4 +122,5 @@ def delete_post(post_id):
         return redirect(f'/users/{post.user_id}')
     else:
         return render_template('delete_post.html', post=post)
+    
     
