@@ -19,7 +19,7 @@ def show_user_list():
     return render_template('/userlist.html', users=users)
 
 @app.route('/users')
-def user_list_with_add_button():
+def user_profile():
     """User Profile View With Add Button"""
     users = User.query.all()
     return render_template('users.html', users=users)
