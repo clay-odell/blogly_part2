@@ -48,6 +48,7 @@ class Post (db.Model):
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'))
     
+    user = db.relationship('User')
     tags = db.relationship('Tag', secondary ='post_tags', backref ='posts_tags')
 
 class Tag (db.Model):
