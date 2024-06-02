@@ -48,7 +48,7 @@ class Post (db.Model):
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'))
     
-    tags = db.relationship('Tag', secondary ='post_tags', backref ='posts')
+    tags = db.relationship('Tag', secondary ='post_tags', backref ='posts_tags')
 
 class Tag (db.Model):
     """Tag Table"""
@@ -60,7 +60,7 @@ class Tag (db.Model):
                      nullable = False,
                      unique = True)
     
-    posts = db.relationship('Post', secondary='post_tags', backref='tags')
+    posts = db.relationship('Post', secondary='post_tags', backref='tags_posts')
     
 
 class PostTag (db.Model):

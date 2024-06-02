@@ -2,7 +2,7 @@
 
 from flask import Flask, redirect, render_template, request
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:01302@localhost/blogly'
@@ -124,3 +124,22 @@ def delete_post(post_id):
         return render_template('delete_post.html', post=post)
     
     
+@app.route('/tags')
+def tag_list():
+    """Tags View"""
+    tags = Tag.query.all()
+    return render_template('taglist.html', tags=tags)
+
+
+@app.route('/tags/new', methods=['GET', 'POST'])
+def add_new_tag():
+    """Add New Tag"""
+    if request.method == 'POST':
+        tag_name = request.form["name"]
+        tag = Tag(name=tag_name)
+        db.session.add(tag)
+        db.session.commit()
+        return redirect('/tags')
+    else:
+        return render_template('add_tag.html')
+
