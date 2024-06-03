@@ -31,23 +31,17 @@ class User (db.Model):
 class Post (db.Model):
     """Post Table"""
     __tablename__ = "posts"
-
     id = db.Column(db.Integer,
                    primary_key = True,
-                   autoincrement = True)
-    
+                   autoincrement = True) 
     title = db.Column(db.Text,
                       nullable = False)
-    
     content = db.Column(db.Text,
                         nullable = False)
-    
     created_at = db.Column(db.DateTime, 
                            default=datetime.now(timezone.utc))
-    
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'))
-    
     user = db.relationship('User')
     tags = db.relationship('Tag', secondary ='post_tags', backref ='posts_tags')
 
