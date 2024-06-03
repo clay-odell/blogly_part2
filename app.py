@@ -140,6 +140,7 @@ def show_posts_for_tag(tags_id):
 @app.route('/tags/new', methods=['GET', 'POST'])
 def add_new_tag():
     """Add New Tag"""
+    
     if request.method == 'POST':
         tag_name = request.form["name"]
         tag = Tag(name=tag_name)
@@ -147,7 +148,7 @@ def add_new_tag():
         db.session.commit()
         return redirect('/tags')
     else:
-        return render_template('add_tag.html', tag=tag)
+        return render_template('add_tag.html')
     
 @app.route('/tags/<int:tags_id>/edit', methods=['GET', 'POST'])
 def edit_tags(tags_id):
