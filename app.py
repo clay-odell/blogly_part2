@@ -123,12 +123,18 @@ def delete_post(post_id):
     else:
         return render_template('delete_post.html', post=post)
     
-    
+##Tag & Post Tag Routes    
 @app.route('/tags')
 def tag_list():
     """Tags View"""
     tags = Tag.query.all()
     return render_template('taglist.html', tags=tags)
+
+@app.route('/tags/<int:tags_id>')
+def show_posts_for_tag(tags_id):
+    """Show Tag Detail with Posts"""
+    tag = Tag.query.get_or_404(tags_id)
+    return render_template('tag_detail.html', tag=tag)
 
 
 @app.route('/tags/new', methods=['GET', 'POST'])
@@ -141,5 +147,16 @@ def add_new_tag():
         db.session.commit()
         return redirect('/tags')
     else:
-        return render_template('add_tag.html')
+        return render_template('add_tag.html', tag=tag)
+    
+@app.route('/tags/<int:tags_id>/edit', methods=['GET', 'POST'])
+def edit_tags(tags_id):
+    """Edit Tags"""
+    tag = Tag.query.get_or_404(tags_id)
+    if request.method == 'POST':
+        tag.name = request.form["name"]
+        db.session.commit()
+        return redirect('/tags')
+    else:
+        return render_template('edit_tag.html', tag=tag)
 
