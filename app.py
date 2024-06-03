@@ -159,4 +159,15 @@ def edit_tags(tags_id):
         return redirect('/tags')
     else:
         return render_template('edit_tag.html', tag=tag)
+    
+@app.route('/tags/<int:tags_id>/delete', methods=['GET', 'POST'])
+def delete_tag(tags_id):
+    """Delete Tag"""
+    tag = Tag.query.get_or_404(tags_id)
+    if request.method == 'POST':
+        db.session.delete(tag)
+        db.session.commit()
+        return redirect('/tags')
+    else:
+        return render_template('delete_tag.html', tag=tag)
 

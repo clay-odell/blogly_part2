@@ -1,19 +1,19 @@
 {% extends "base.html" %} {% block title %} Tag View {% endblock %} {% block
 main %}
-<h1>Tag Detail for {{tags.name}}</h1>
+<h1>Tag Detail for {{tag.name}}</h1>
 <ul>
-    {% for post in tags.posts %}
+    {% for post in tag.posts %}
     <li>
         <h2><a href="/post/{{post.id}}">{{post.title}}</a></h2>
     </li>
     {% endfor %}
 </ul>
 
-<form action="/tags/{{tags.id}}/edit" method="POST">
+<form action="/tags/{{tag.id}}/edit" method="GET">
   <input type="submit" value="Edit Tag" />
 </form>
 <br />
-<form action="/tags/{{tags.id}}/delete">
+<form action="/tags/{{tag.id}}/delete">
   <input type="submit" value="Delete" />
 </form>
 <br />
