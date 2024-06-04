@@ -3,7 +3,7 @@
 Delete User: {{user.first_name}} {{user.last_name}}
 {% endblock %}
 {% block main %}
-<h1>Delete User: {{user.first_name}} {{user.last_name}}</h1>
+<h1>Delete User: {{user.full_name()}}</h1>
 <p>Are you sure you want to delete this user?</p>
 <div class="submit">
 <form method="POST">

@@ -5,6 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Post, Tag, PostTag
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'my-super-secret-key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:01302@localhost/blogly_2'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
@@ -81,21 +82,25 @@ def delete_user(user_id):
 def new_post(user_id):
     """Add a New Post"""
     user = User.query.get_or_404(user_id)
+    tags = Tag.query.all()
     if request.method == 'POST':
         title = request.form["title"]
         content = request.form["content"]
+        tag_ids = [int(tag_id) for tag_id in request.form.getlist("tags")]
         post = Post(title=title, content=content, user_id=user_id)
+        post.tags= Tag.query.filter(Tag.id.in_(tag_ids)).all()
         db.session.add(post)
         db.session.commit()
         return redirect(f'/users/{user_id}')
     else:
-        return render_template('new_post.html', user=user)
+        return render_template('new_post.html', user=user, tags=tags)
 
 
 @app.route('/posts/<int:post_id>')
 def show_post(post_id):
     """Show Post"""
     post = Post.query.get_or_404(post_id)
+    
     return render_template('show_post.html', post=post)
 
 
@@ -103,13 +108,16 @@ def show_post(post_id):
 def edit_post(post_id):
     """Edit Post"""
     post = Post.query.get_or_404(post_id)
+    tags = Tag.query.all()
     if request.method == 'POST':
         post.title = request.form["title"]
         post.content = request.form["content"]
+        tag_ids = [int(tag_id) for tag_id in request.form.getlist("tags")]
+        post.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
         db.session.commit()
         return redirect(f'/posts/{post_id}')
     else:
-        return render_template('edit_post.html', post=post)
+        return render_template('edit_post.html', post=post, tags=tags)
 
 
 @app.route('/posts/<int:post_id>/delete', methods=['GET', 'POST'])

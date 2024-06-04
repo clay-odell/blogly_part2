@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block title %}
-Edit User {{user.first_name}} {{user.last_name}}
+Edit User {{user.full_name()}}
 {% endblock %}
 {% block main %}
-<h1>Current User: {{user.first_name}} {{user.last_name}}</h1>
+<h1>Current User: {{user.full_name()}}</h1>
 <h2>Edit User Form</h2>
 <p>Edit user by completing and submitting this form.</p>
 <form method="POST">

@@ -1,4 +1,4 @@
-from models import User, Post, datetime
+from models import User, Post, Tag, datetime
 
 from app import db, app
 
@@ -31,10 +31,29 @@ def seed_posts():
         db.session.add(post)
         db.session.commit()
 
+def seed_tags():
+    tags = [
+    Tag(name='First Post'),
+    Tag(name='New User'),
+    Tag(name='Fun'),
+    Tag(name='Excited'),
+    Tag(name='Ask Me Anything (AMA)'),
+    Tag(name='Birthday Post'),
+    Tag(name='Cake Day Post'),
+    Tag(name='Help'),
+    Tag(name='Advice')
+
+    ]
+    for tag in tags:
+        db.session.add(tag)
+        db.session.commit()
+    
+
 with app.app_context():
     db.drop_all()
     db.create_all()
     seed_users()
     seed_posts()
+    seed_tags()
 
 

@@ -1,25 +1,29 @@
-{% extends "base.html" %}
-{% block title %}
-Edit Post: {{post.id}}
-{% endblock %}
-{% block main %}
-<h1>Edit Post {{post.id}}</h1>
+{% extends "base.html" %} {% block title %} Edit Post: {{post.id}} {% endblock
+%} {% block main %}
+<h1>Edit Post # {{post.id}} by {{post.user.full_name()}}</h1>
 <div class="existing-post">
-    <h3><b>Current Title</b>: {{post.title}}</h3>
-    <p><b>Current Content</b>: {{post.content}}</p>
+  <h3><b>Current Title</b>: {{post.title}}</h3>
+  <p><b>Current Content</b>: {{post.content}}</p>
 </div>
 <section class="edit-form">
-    <form method="POST">
-    <p>New Title: <br><input type="text" name="title" required></p>
-    <p>New Content: <br><textarea name="content" required></textarea></p>
-    <br>
-    <input type="submit" value="Submit Edits">
-</form>
+  <form method="POST">
+    <p>New Title: <br /><input type="text" name="title" required /></p>
+    <p>New Content: <br /><textarea name="content" required></textarea></p>
+    <br />
+    <p><b>Tags:</b><br>
+      {% for tag in tags %}
+      <input type="checkbox" name="tags" value="{{tag.id}}" />
+
+      {{tag.name}}<br> {% endfor %}
+    </p>
+    <br />
+    <input type="submit" value="Submit Edits" />
+  </form>
 </section>
-<br>
+<br />
 <section class="cancel">
-    <form action="/users/{{post.user.id}}">
-        <input type="submit" value="CANCEL">
-    </form>
+  <form action="/users/{{post.user.id}}">
+    <input type="submit" value="CANCEL" />
+  </form>
 </section>
 {% endblock %}

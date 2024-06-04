@@ -3,7 +3,7 @@ main %}
 <h1>Blogly User List</h1>
 <ul>
   {% for user in users %}
-  <li><a href="/users/{{user.id}}">{{user.first_name}} {{user.last_name}}</a></li>
+  <li><a href="/users/{{user.id}}">{{user.full_name()}}</a></li>
   {% endfor %}
 </ul>
 {% endblock %}

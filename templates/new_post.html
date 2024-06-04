@@ -9,6 +9,10 @@ New Post
     <form method="POST">
         <p>Post Title: <br><input type="text" name="title" required></p>
         <p>Post Content: <br><textarea name="content" required></textarea></p>
+        <p>Post Tags: <br>
+            {% for tag in tags %}
+            <input type="checkbox" name="tags" value="{{tag.id}}">{{tag.name}}<br>
+            {% endfor %}</p>
         <input type="submit" value="Add Post">
     </form>
     <br>

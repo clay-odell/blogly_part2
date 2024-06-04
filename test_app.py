@@ -2,7 +2,7 @@ import unittest
 from flask_testing import TestCase
 from flask import Flask
 from app import app
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag
 
 class FlaskRouteTestCase(TestCase):
     def create_app(self):
@@ -24,11 +24,24 @@ class FlaskRouteTestCase(TestCase):
         db.session.commit()
         return test_user
     
-    def create_test_post(self):
+    def test_full_name(self):
+        """Test Full Name Method"""
+        test_user = self.create_test_user()
+        self.assertEqual(test_user.full_name(), 'Vinny Testerverde')
+    
+    def create_test_post(self, user_id=None):
         test_post = Post(title="Test Post", content='This is just some test content', created_at='2024-01-01 12:00:00')
+        if user_id is not None:
+            test_post.user_id = user_id
         db.session.add(test_post)
         db.session.commit()
         return test_post
+    
+    def create_test_tag(self):
+        test_tag = Tag(name='Test Tag')
+        db.session.add(test_tag)
+        db.session.commit()
+        return test_tag
 
     def test_show_user_list(self):
         """Test Show User List"""
@@ -108,13 +121,16 @@ class FlaskRouteTestCase(TestCase):
         test_user = self.create_test_user()
         response = self.client.get(f'/users/{test_user.id}/posts/new')
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(test_user.full_name(), 'Vinny Testerverde')
     
     def test_new_post_post(self):
         """Test New Post Post Route"""
         test_user = self.create_test_user()
+        test_tag = self.create_test_tag()
         new_post_data ={
             'title': 'Test Post',
             'content': 'This is just some test content',
+            'tags': [str(test_tag.id)]
         }
         response = self.client.post(f'/users/{test_user.id}/posts/new', data=new_post_data)
         test_post = Post.query.filter_by(title=new_post_data['title']).first()
@@ -122,20 +138,27 @@ class FlaskRouteTestCase(TestCase):
         self.assertEqual(test_post.title, new_post_data['title'])
         self.assertEqual(test_post.content, new_post_data['content'])
         self.assertEqual(test_post.user_id, test_user.id)
+        self.assertEqual(len(test_post.tags), 1)
+        with self.client as c:
+            with c.session_transaction() as sess: sess['user_id'] = test_user.id
+            response = self.client.get(f'/users/{test_user.id}/posts/{test_post.id}')
+            self.assertIn(test_user.full_name(), 'Vinny Testerverde')
 
     def test_show_post(self):
         """Test Show Post"""
         test_user = self.create_test_user()
-        test_post = self.create_test_post()
+        test_post = self.create_test_post(user_id=test_user.id)
         response = self.client.get(f'/posts/{test_post.id}')
         self.assertEqual(response.status_code, 200)
+        self.assertIn(test_user.full_name(), response.get_data(as_text=True))
 
     def test_edit_post_get(self):
         """Test Edit Post Get Route"""
         test_user = self.create_test_user()
-        test_post = self.create_test_post()
+        test_post = self.create_test_post(user_id=test_user.id)
         response = self.client.get(f'/posts/{test_post.id}/edit')
         self.assertEqual(response.status_code, 200)
+        self.assertIn(test_user.full_name(), response.get_data(as_text=True))
 
     def test_edit_post_post(self):
         """Test Edit Post Post Route"""
@@ -166,13 +189,19 @@ class FlaskRouteTestCase(TestCase):
         post = Post.query.get(test_post.id)
         self.assertIsNone(post)
 
+    def test_tag_list(self):
+        """Test Tag List"""
+        test_tag = self.create_test_tag()
+        response = self.client.get('/tags')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(test_tag.name, 'Test Tag')
 
+    def test_add_tag(self):
+        """Test Add Tag"""
+        response = self.client.get('/tags/new')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Add A Tag', response.get_data(as_text=True))
 
-
-
-
-
-    
 
 
 if __name__ == '__main__':

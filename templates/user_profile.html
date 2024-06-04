@@ -4,7 +4,7 @@ User Profile View
 {% endblock %}
 {% block main %}
 <h1>User Profile Information</h1>
-<h3>User: {{user.first_name}} {{user.last_name}}</h3>
+<h3>User: {{user.full_name()}}</h3>
 <div>
     <img src="{{user.image_URL}}" width="250">
 </div>
