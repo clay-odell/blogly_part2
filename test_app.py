@@ -196,11 +196,61 @@ class FlaskRouteTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(test_tag.name, 'Test Tag')
 
-    def test_add_tag(self):
-        """Test Add Tag"""
+    def test_add_new_tag_get(self):
+        """Test Add Tag Get Route"""
         response = self.client.get('/tags/new')
         self.assertEqual(response.status_code, 200)
         self.assertIn('Add A Tag', response.get_data(as_text=True))
+
+    def test_add__new_tag_post(self):
+        """Test Add Tag Post Route"""
+        with app.test_client() as client:
+            tag_name = 'NewTag'
+            data = {'name': tag_name}
+            response = client.post('/tags/new', data=data, follow_redirects=True)
+
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(tag_name, 'NewTag')
+
+    def test_edit_tags_get(self):
+        """Test Edit Tags Get Route"""
+        tag = Tag(name='OriginalTag')
+        db.session.add(tag)
+        db.session.commit()
+        with app.test_client() as client:
+            response = client.get(f'/tags/{tag.id}/edit')
+            
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('Edit Tag', response.get_data(as_text=True))
+            self.assertEqual(tag.name, 'OriginalTag')
+
+    def test_edit_tags_post(self):
+        """Test Edit Tags Post Route"""
+        tag = Tag(name='OriginalTag')
+        db.session.add(tag)
+        db.session.commit()
+        with app.test_client() as client:
+            new_tag_name = 'EditedTag'
+            data = {'name': new_tag_name}
+
+            response = client.post(f'/tags/{tag.id}/edit', data=data, follow_redirects=False)
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(new_tag_name, 'EditedTag')
+    
+    def test_delete_tag_post(self):
+        """Test Delete Tag Post Route"""
+        with app.test_client() as client:
+            test_tag = self.create_test_tag()
+            tag_id = test_tag.id
+
+            response = client.post(f'/tags/{tag_id}/delete', follow_redirects=False)
+            self.assertEqual(response.status_code, 302)
+            tag = Tag.query.get(tag_id)
+            self.assertIsNone(tag)
+        
+
+
+
 
 
 
